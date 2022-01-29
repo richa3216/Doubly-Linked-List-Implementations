@@ -1,0 +1,125 @@
+#include <iostream>
+
+using namespace std;
+struct node{
+    int data;
+    struct node *next;
+    struct node *prev;
+}*newnode,*temp,*head,*after,*current,*nextnode,*tail;
+void reverse()
+{
+    current=head;
+    temp=head;
+    while(temp->next!=0)
+    temp=temp->next;
+    tail=temp;
+    while(current!=0)
+    {
+        nextnode=current->next;
+        current->next=current->prev;
+        current->prev=nextnode;
+        current=nextnode;
+    }
+    current=head;
+    head=tail;
+    tail=current;
+}
+void del_beg()
+{
+    temp=head;
+    temp->next->prev=0;
+    head=temp->next;
+    free(temp);
+}
+void del_end()
+{
+    temp=head;
+    while(temp->next!=0)
+    temp=temp->next;
+    temp->prev->next=0;
+    free(temp);
+}
+void del_pos()
+{
+    temp=head;
+    int pos,i=1;
+    cout<<"Enter pos";
+    cin>>pos;
+    while(i<pos-1)
+    {
+        temp=temp->next;
+        i++;
+        
+    }
+    after=temp->next;
+    temp->next=after->next;
+    after->next->prev=temp;
+    free(after);
+
+    
+    
+}
+void insert_beg()
+{
+    temp=head;
+    newnode=(struct node*)malloc(sizeof(struct node));
+    cout<<"enter no to be entered";
+    cin>>newnode->data;
+    newnode->prev=0;
+    head->prev=newnode;
+    newnode->next=head;
+    head=newnode;
+}
+void insert_end()
+{
+    temp=head;
+    newnode=(struct node*)malloc(sizeof(struct node));
+    cout<<"enter no to be entered";
+    cin>>newnode->data;
+    newnode->next=0;
+    while(temp->next!=0)
+    {
+        temp=temp->next;
+        
+    }
+    newnode->prev=temp;
+    temp->next=newnode;
+}
+int main()
+{
+    int n;
+    cout<<"enter no of terms";
+    cin>>n;
+    head=0;
+    while(n)
+    {
+        
+        newnode=(struct node*)malloc(sizeof(struct node));
+        cout<<"enter term";
+        cin>>newnode->data;
+        newnode->prev=0;
+        newnode->next=0;
+        if(head==0)
+        head=temp=newnode;
+        else{
+            temp->next=newnode;
+            newnode->prev=temp;
+            temp=temp->next;
+        }
+        n--;
+    }
+    insert_beg();
+    insert_end();
+    del_pos();
+    del_end();
+    del_beg();
+    reverse();
+    temp=head;
+    while(temp!=0)
+    {
+        cout<<temp->data;
+        temp=temp->next;
+    }
+
+    return 0;
+}
